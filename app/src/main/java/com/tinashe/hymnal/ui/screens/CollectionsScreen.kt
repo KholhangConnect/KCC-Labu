@@ -62,13 +62,13 @@ fun CollectionsScreen(
                     if (!isSearchActive) {
                         IconButton(onClick = { isSearchActive = true }) {
                             Icon(
-                                imageVector = Icons.Default.Search,
+                                imageVector = Icons.Filled.Search,
                                 contentDescription = stringResource(R.string.title_search)
                             )
                         }
                         IconButton(onClick = onAddCollection) {
                             Icon(
-                                imageVector = Icons.Default.Add,
+                                imageVector = Icons.Filled.Add,
                                 contentDescription = stringResource(R.string.new_collection)
                             )
                         }

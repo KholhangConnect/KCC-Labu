@@ -18,7 +18,8 @@ import com.tinashe.hymnal.R
 import com.tinashe.hymnal.data.model.Hymnal
 import com.tinashe.hymnal.data.model.constants.Status
 import com.tinashe.hymnal.ui.hymns.HymnsViewModel
-import com.tinashe.hymnal.ui.hymns.hymnals.HymnalListFragment.Companion.SELECTED_HYMNAL_KEY
+
+private const val SELECTED_HYMNAL_KEY = "selected_hymnal"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -71,7 +72,7 @@ fun HymnsScreen(
                     if (!isSearchActive) {
                         IconButton(onClick = { isSearchActive = true }) {
                             Icon(
-                                imageVector = Icons.Default.Search,
+                                imageVector = Icons.Filled.Search,
                                 contentDescription = stringResource(R.string.title_search)
                             )
                         }
@@ -164,7 +165,7 @@ fun SearchBar(
         onValueChange = onQueryChange,
         placeholder = { Text(stringResource(R.string.hint_search_hymns)) },
         leadingIcon = {
-            Icon(Icons.Default.Search, contentDescription = null)
+            Icon(Icons.Filled.Search, contentDescription = null)
         },
         trailingIcon = {
             IconButton(onClick = onClose) {

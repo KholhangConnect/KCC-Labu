@@ -4,9 +4,6 @@ import android.app.Activity
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AdminPanelSettings
-import androidx.compose.material.icons.filled.Help
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -63,7 +60,7 @@ fun SupportScreen(
                         // Launch subscriptions URL
                     }) {
                         Icon(
-                            imageVector = Icons.Default.AdminPanelSettings,
+                            painter = painterResource(R.drawable.ic_admin_panel_settings),
                             contentDescription = stringResource(R.string.manage_subscriptions)
                         )
                     }
@@ -73,7 +70,7 @@ fun SupportScreen(
                         }
                     }) {
                         Icon(
-                            imageVector = Icons.Default.Help,
+                            painter = painterResource(R.drawable.ic_help),
                             contentDescription = stringResource(R.string.title_help)
                         )
                     }

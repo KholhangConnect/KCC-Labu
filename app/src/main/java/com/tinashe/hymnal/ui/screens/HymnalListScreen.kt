@@ -17,7 +17,8 @@ import androidx.navigation.NavController
 import com.tinashe.hymnal.R
 import com.tinashe.hymnal.data.model.Hymnal
 import com.tinashe.hymnal.ui.hymns.hymnals.HymnalListViewModel
-import com.tinashe.hymnal.ui.hymns.hymnals.HymnalListFragment.Companion.SELECTED_HYMNAL_KEY
+
+private const val SELECTED_HYMNAL_KEY = "selected_hymnal"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +49,7 @@ fun HymnalListScreen(
                 actions = {
                     IconButton(onClick = { showInfoDialog = true }) {
                         Icon(
-                            imageVector = Icons.Default.Info,
+                            imageVector = Icons.Filled.Info,
                             contentDescription = stringResource(R.string.title_info)
                         )
                     }

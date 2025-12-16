@@ -24,7 +24,7 @@ import com.tinashe.hymnal.ui.screens.CollectionsScreen
 import com.tinashe.hymnal.ui.screens.HymnalListScreen
 import com.tinashe.hymnal.ui.screens.HymnsScreen
 import com.tinashe.hymnal.ui.screens.InfoScreen
-import com.tinashe.hymnal.ui.screens.SupportScreen
+import com.tinashe.hymnal.ui.screens.SettingsScreen
 import com.tinashe.hymnal.ui.theme.CISTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -99,8 +99,8 @@ fun MainNavigation() {
             composable(NavRoute.Collections.route) {
                 CollectionsScreen()
             }
-            composable(NavRoute.Support.route) {
-                SupportScreen()
+            composable(NavRoute.Settings.route) {
+                SettingsScreen()
             }
             composable(NavRoute.Info.route) {
                 InfoScreen()
@@ -123,9 +123,9 @@ fun BottomNavigationBar(navController: NavHostController) {
             label = R.string.title_collections
         ),
         BottomNavItem(
-            route = NavRoute.Support.route,
-            icon = R.drawable.ic_support,
-            label = R.string.title_support
+            route = NavRoute.Settings.route,
+            icon = R.drawable.ic_admin_panel_settings,
+            label = R.string.title_settings
         ),
         BottomNavItem(
             route = NavRoute.Info.route,

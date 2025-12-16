@@ -27,9 +27,7 @@ ext.versions = [
         'fb_analytics'      : '22.0.0',
         'fb_crashytics'     : '19.0.0',
         'ktlint'            : '0.50.0',
-        'aztec'             : 'v1.3.43',
         'billing'           : '7.1.1',
-        'material_tap'      : '3.0.0',
 
         // testing
         'junit'             : '4.13.2',

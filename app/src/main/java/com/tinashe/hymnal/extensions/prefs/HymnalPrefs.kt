@@ -28,4 +28,23 @@ interface HymnalPrefs {
     fun isHymnalPromptSeen(): Boolean
 
     fun setHymnalPromptSeen()
+    
+    // New settings
+    fun getBackgroundColor(): Int
+    fun setBackgroundColor(color: Int)
+    
+    fun getChorusColor(): Int
+    fun setChorusColor(color: Int)
+    
+    fun isHighlightsEnabled(): Boolean
+    fun setHighlightsEnabled(enabled: Boolean)
+    
+    fun getTextIndent(): Float
+    fun setTextIndent(indent: Float)
+    
+    fun isKeepScreenOn(): Boolean
+    fun setKeepScreenOn(enabled: Boolean)
+    
+    fun getLineSpacing(): Float
+    fun setLineSpacing(spacing: Float)
 }
