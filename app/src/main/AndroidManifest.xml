@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:name=".HymnalApp"
+        android:allowBackup="false"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.CIS">
+        <activity
+            android:name="com.tinashe.hymnal.ui.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.CIS.Main"
+            android:windowSoftInputMode="adjustNothing"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.hymns.sing.SingHymnsActivity"
+            android:label="@string/blank"
+            android:theme="@style/Theme.CIS.Sing" />
+
+        <activity
+            android:name=".ui.hymns.sing.edit.EditHymnActivity"
+            android:label="@string/title_edit_hymn"
+            android:theme="@style/Theme.CIS.Sing" />
+
+        <activity
+            android:name=".ui.hymns.sing.present.PresentHymnActivity"
+            android:label="@string/blank"
+            android:screenOrientation="userLandscape" />
+
+        <!-- Initializers -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+
+            <meta-data
+                android:name="com.tinashe.hymnal.initializer.TimberInitializer"
+                android:value="androidx.startup" />
+
+        </provider>
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+
+</manifest>
