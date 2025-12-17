@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="argument_selected_hymn">selected_hymn</string>
+
+    <string name="transition_shared_element">transition:shared_element</string>
+
+    <string name="youtube">YouTube</string>
+    <string name="app_full_name">KCC Labu</string>
+    <string name="app_developer">By Kholhang Connect</string>
+    <string name="app_email">kholhangconnect@gmail.com</string>
+    <string name="app_link">https://play.google.com/store/apps/details?id=com.kholhang.kcclabu</string>
+    <string name="app_source">https://github.com/kholhangconnect</string>
+    <string name="app_youtube">https://youtube.com/@kholhangconnect</string>
+    <string name="app_share_message">Get the KCC Labu App!\n\n%1$s</string>
+    <string name="app_privacy_policy">https://kholhangconnect.com/policy/</string>
+    <string name="app_terms">https://kholhangconnect.com/terms/</string>
+    <string name="subscriptions_url">https://play.google.com/store/account/subscriptions</string>
+</resources>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSave"
+                style="@style/Widget.MTL.Button.Text"
+                android:layout_width="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:text="@string/title_save"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </androidx.appcompat.widget.Toolbar>
+
+        <include
+            layout="@layout/toolbar_divider"/>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingHorizontal="@dimen/spacing_medium"
+        android:paddingTop="@dimen/spacing_medium"
+        android:paddingBottom="@dimen/spacing_huge"
+        android:scrollbarStyle="outsideOverlay"
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/edtHymn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:autofillHints="@string/blank"
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="textCapSentences|textMultiLine|textImeMultiLine"
+            android:textSize="@dimen/text_size_22sp"
+            android:textColor="?android:attr/textColorPrimary"
+            tools:text="@tools:sample/lorem/random" />
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.kholhang.kcclabu.ui.widget.FadingSnackbar
+        android:id="@+id/snackbar"
+        android:layout_width="@dimen/snackbar_width"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginEnd="@dimen/snackbar_margin_end_fab"
+        android:layout_marginBottom="@dimen/snackbar_margin_bottom"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <!-- AztecToolbar removed - will be replaced in Compose migration -->
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.kholhang.kcclabu.ui.widget.ZoomableNestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:keepScreenOn="true"
+    android:paddingTop="@dimen/spacing_medium"
+    android:paddingBottom="@dimen/spacing_xlarge"
+    android:scrollbarStyle="outsideOverlay"
+    android:scrollbars="vertical"
+    android:fadeScrollbars="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/spacing_medium"
+        android:paddingEnd="@dimen/spacing_medium"
+        android:paddingTop="@dimen/spacing_medium"
+        android:paddingBottom="@dimen/spacing_xlarge">
+
+        <TextView
+            android:id="@+id/hymnText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="200dp"
+            android:lineSpacingExtra="@dimen/spacing_micro"
+            android:paddingStart="@dimen/spacing_medium"
+            android:paddingEnd="@dimen/spacing_medium"
+            android:paddingTop="@dimen/spacing_medium"
+            android:paddingBottom="@dimen/spacing_medium"
+            android:textAppearance="@style/MTL.TextAppearance.Medium"
+            android:textIsSelectable="true"
+            android:textSize="@dimen/text_size_22sp"
+            android:letterSpacing="0.02"
+            android:breakStrategy="balanced"
+            android:hyphenationFrequency="normal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/lorem/random" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.kholhang.kcclabu.ui.widget.ZoomableNestedScrollView>

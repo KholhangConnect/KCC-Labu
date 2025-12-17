@@ -1,0 +1,83 @@
+name: Build Release APK
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build Release APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Decode Firebase google-services.json (if available)
+        if: ${{ secrets.FIREBASE_CONFIG != '' }}
+        env:
+          FIREBASE_CONFIG: ${{ secrets.FIREBASE_CONFIG }}
+        run: |
+          if [ ! -z "$FIREBASE_CONFIG" ]; then
+            echo "$FIREBASE_CONFIG" > app/google-services.json
+          fi
+
+      - name: Decode Keystore properties file (if available)
+        if: ${{ secrets.KEY_STORE_PROPERTIES != '' }}
+        env:
+          KEY_PROPERTIES: ${{ secrets.KEY_STORE_PROPERTIES }}
+        run: |
+          if [ ! -z "$KEY_PROPERTIES" ]; then
+            echo "$KEY_PROPERTIES" > app/keystore.properties
+          fi
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Build Release APK
+        if: ${{ secrets.KEY_STORE_PROPERTIES != '' }}
+        run: ./gradlew assembleRelease
+
+      - name: Upload Debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: warn
+
+      - name: Upload Release APK
+        if: ${{ secrets.KEY_STORE_PROPERTIES != '' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release
+          path: app/build/outputs/apk/release/app-release.apk
+          if-no-files-found: warn
+
+      - name: Get tag name
+        id: tag
+        run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            app/build/outputs/apk/debug/app-debug.apk
+            app/build/outputs/apk/release/app-release.apk
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
