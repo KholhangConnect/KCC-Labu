@@ -9,9 +9,9 @@
         android:visible="false"/>
 
     <item
-        android:id="@+id/action_fullscreen"
-        android:icon="@drawable/ic_fullscreen"
-        android:title="@string/full_screen"
+        android:id="@+id/action_edit"
+        android:icon="@drawable/ic_edit"
+        android:title="@string/title_edit_hymn"
         app:showAsAction="ifRoom" />
 
     <item

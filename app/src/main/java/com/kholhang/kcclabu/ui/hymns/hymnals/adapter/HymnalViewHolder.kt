@@ -1,0 +1,47 @@
+package com.kholhang.kcclabu.ui.hymns.hymnals.adapter
+
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.view.isVisible
+import androidx.recyclerview.widget.RecyclerView
+import com.kholhang.kcclabu.R
+import com.kholhang.kcclabu.data.model.Hymnal
+import com.kholhang.kcclabu.databinding.HymnalListItemBinding
+import com.kholhang.kcclabu.extensions.tint
+import com.kholhang.kcclabu.extensions.toColor
+import com.kholhang.kcclabu.extensions.view.inflateView
+
+class HymnalViewHolder(private val containerView: View) : RecyclerView.ViewHolder(containerView) {
+
+    private val binding: HymnalListItemBinding by lazy { HymnalListItemBinding.bind(containerView) }
+
+    fun bind(hymnal: Hymnal) {
+        binding.apply {
+            icon.background.tint(COLORS[absoluteAdapterPosition % COLORS.size].toColor())
+            iconCheck.isVisible = hymnal.selected
+            hymnalTitle.text = hymnal.title
+            hymnalLanguage.text = hymnal.language
+            imgHymnalState.setImageResource(
+                if (hymnal.offline) {
+                    R.drawable.ic_offline_pin
+                } else {
+                    R.drawable.ic_download
+                }
+            )
+        }
+    }
+
+    companion object {
+        /**
+         * Adventist Identity colors
+         *
+         * https://identity.adventist.org/global-elements/color/
+         */
+        private val COLORS =
+            arrayListOf("#4b207f", "#5e3929", "#7f264a", "#2f557f", "#e36520", "#448d21", "#3e8391")
+
+        fun create(parent: ViewGroup): HymnalViewHolder = HymnalViewHolder(
+            inflateView(R.layout.hymnal_list_item, parent, false)
+        )
+    }
+}

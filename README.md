@@ -1,16 +1,16 @@
-# Christ In Song Android App
+# KCC Labu Android App
 
-[![GitHub Actions](https://github.com/TinasheMzondiwa/cis-android/workflows/workflow/badge.svg)](.github/workflows/workflow.yml)
+[![GitHub Actions](https://github.com/kholhangconnect/kcclabu/workflows/workflow/badge.svg)](.github/workflows/workflow.yml)
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
 ## Screenshots
 <img src="art/1.png" width="25%" /><img src="art/2.png" width="25%" /><img src="art/3.png" width="25%" /><img src="art/4.png" width="25%" />
 
-**[Install on Google Play](https://play.google.com/store/apps/details?id=com.tinashe.christInSong)**
+**[Install on Google Play](https://play.google.com/store/apps/details?id=com.kholhang.kcclabu)**
 
 ## License
 
-    Copyright 2020 Tinashe Mzondiwa
+    Copyright 2024 Kholhang Connect
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

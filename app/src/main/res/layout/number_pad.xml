@@ -62,7 +62,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnOne"
-        style="@style/Widget.CIS.NumPad"
+        style="@style/Widget.MTL.NumPad"
         android:text="1"
         app:layout_constraintEnd_toStartOf="@id/btnTwo"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -72,7 +72,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnTwo"
-        style="@style/Widget.CIS.NumPad"
+        style="@style/Widget.MTL.NumPad"
         android:text="2"
         app:layout_constraintEnd_toStartOf="@id/btnThree"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -82,7 +82,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnThree"
-        style="@style/Widget.CIS.NumPad"
+        style="@style/Widget.MTL.NumPad"
         android:text="3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -92,7 +92,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnFour"
-        style="@style/Widget.CIS.NumPad"
+        style="@style/Widget.MTL.NumPad"
         android:text="4"
         app:layout_constraintEnd_toStartOf="@id/btnFive"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -102,7 +102,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnFive"
-        style="@style/Widget.CIS.NumPad"
+        style="@style/Widget.MTL.NumPad"
         android:text="5"
         app:layout_constraintEnd_toStartOf="@id/btnSix"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -112,7 +112,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSix"
-        style="@style/Widget.CIS.NumPad"
+        style="@style/Widget.MTL.NumPad"
         android:text="6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -122,7 +122,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSeven"
-        style="@style/Widget.CIS.NumPad"
+        style="@style/Widget.MTL.NumPad"
         android:text="7"
         app:layout_constraintEnd_toStartOf="@id/btnEight"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -132,7 +132,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnEight"
-        style="@style/Widget.CIS.NumPad"
+        style="@style/Widget.MTL.NumPad"
         android:text="8"
         app:layout_constraintEnd_toStartOf="@id/btnNine"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -142,7 +142,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnNine"
-        style="@style/Widget.CIS.NumPad"
+        style="@style/Widget.MTL.NumPad"
         android:text="9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
@@ -152,9 +152,9 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn0"
-        style="@style/Widget.CIS.NumPad"
+        style="@style/Widget.MTL.NumPad"
         android:text="0"
-        app:layout_constraintEnd_toStartOf="@id/btnNine"
+        app:layout_constraintEnd_toStartOf="@id/btnGo"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toEndOf="@id/btnSeven"
         app:layout_constraintTop_toBottomOf="@id/btnEight"
@@ -162,10 +162,10 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnGo"
-        style="@style/Widget.CIS.NumPad"
+        style="@style/Widget.MTL.NumPad"
         android:layout_marginBottom="@dimen/spacing_medium"
         android:fontFamily="@font/proxima_nova_soft_bold"
-        android:text="GO"
+        android:text="@string/button_go"
         android:textAppearance="?attr/textAppearanceHeadline5"
         android:textColor="?attr/colorOnPrimary"
         android:textStyle="bold"
@@ -174,7 +174,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toEndOf="@id/btn0"
-        app:layout_constraintTop_toBottomOf="@id/btn0"
+        app:layout_constraintTop_toTopOf="@id/btn0"
         tools:ignore="HardcodedText"
         tools:visibility="visible" />
 

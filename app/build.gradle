@@ -34,11 +34,11 @@ ant.propertyfile(file: "version.properties") {
 }
 
 android {
-    namespace "com.tinashe.hymnal"
+    namespace "com.kholhang.kcclabu"
     compileSdk versions.targetSdk
 
     defaultConfig {
-        applicationId "com.tinashe.christInSong"
+        applicationId "com.kholhang.kcclabu"
         minSdk versions.minSdk
         targetSdk versions.targetSdk
         versionCode buildVersionCode

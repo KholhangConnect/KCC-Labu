@@ -18,7 +18,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnNew"
-            style="@style/Widget.CIS.Button.Text"
+            style="@style/Widget.MTL.Button.Text"
             android:layout_width="wrap_content"
             android:layout_gravity="end"
             android:layout_marginEnd="@dimen/spacing_medium"

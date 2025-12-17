@@ -38,13 +38,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/cis_gold"
+        android:background="@color/mtl_gold"
         android:elevation="@dimen/spacing_medium"
+        android:fitsSystemWindows="true"
         android:visibility="invisible"
         app:layout_behavior="com.google.android.material.transformation.FabTransformationSheetBehavior"
         tools:visibility="gone">
 
-        <com.tinashe.hymnal.ui.widget.NumberPadView
+        <com.kholhang.kcclabu.ui.widget.NumberPadView
             android:id="@+id/numberPadView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -64,11 +65,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/ic_dialpad"
-        app:backgroundTint="@color/cis_gold"
+        app:backgroundTint="@color/mtl_gold"
         app:layout_anchor="@id/bottomAppBar"
-        app:layout_behavior="com.tinashe.hymnal.ui.widget.ScrollAwareFABBehavior" />
+        app:layout_behavior="com.kholhang.kcclabu.ui.widget.ScrollAwareFABBehavior" />
 
-    <com.tinashe.hymnal.ui.widget.FadingSnackbar
+    <com.kholhang.kcclabu.ui.widget.FadingSnackbar
         android:id="@+id/snackbar"
         android:layout_width="@dimen/snackbar_width"
         android:layout_height="wrap_content"

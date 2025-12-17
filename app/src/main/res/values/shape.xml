@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="ShapeAppearance.CIS.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
+    <style name="ShapeAppearance.MTL.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/size_corner_small</item>
     </style>
 
-    <style name="ShapeAppearance.CIS.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
+    <style name="ShapeAppearance.MTL.MediumComponent" parent="ShapeAppearance.MaterialComponents.MediumComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/size_corner_medium</item>
     </style>
 
-    <style name="ShapeAppearance.CIS.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+    <style name="ShapeAppearance.MTL.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">@dimen/size_corner_large</item>
     </style>

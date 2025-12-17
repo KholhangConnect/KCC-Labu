@@ -61,8 +61,8 @@
 # -keepnames class androidx.navigation.fragment.NavHostFragment
 
 # Application model classes
--keep class com.tinashe.hymnal.data.model.** { *; }
--keep class com.tinashe.hymnal.initializer.TimberInitializer
+-keep class com.kholhang.kcclabu.data.model.** { *; }
+-keep class com.kholhang.kcclabu.initializer.TimberInitializer
 
 # Ignore annotation used for build tooling.
 -dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement

@@ -16,7 +16,7 @@
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnSave"
-                style="@style/Widget.CIS.Button.Text"
+                style="@style/Widget.MTL.Button.Text"
                 android:layout_width="wrap_content"
                 android:layout_gravity="end|center_vertical"
                 android:text="@string/title_save"
@@ -52,7 +52,7 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <com.tinashe.hymnal.ui.widget.FadingSnackbar
+    <com.kholhang.kcclabu.ui.widget.FadingSnackbar
         android:id="@+id/snackbar"
         android:layout_width="@dimen/snackbar_width"
         android:layout_height="wrap_content"

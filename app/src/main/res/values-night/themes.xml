@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <style name="ThemeOverlay.CIS.BottomSheetDialog" parent="Theme.AppCompat.Dialog">
+    <style name="ThemeOverlay.MTL.BottomSheetDialog" parent="Theme.AppCompat.Dialog">
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowSoftInputMode">adjustResize</item>
         <item name="android:navigationBarColor">?attr/colorSurface</item>

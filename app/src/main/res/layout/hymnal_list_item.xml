@@ -38,7 +38,7 @@
         app:layout_constraintEnd_toStartOf="@id/imgHymnalState"
         app:layout_constraintStart_toEndOf="@id/icon"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Christ In Song" />
+        tools:text="KCC Labu" />
 
     <TextView
         android:id="@+id/hymnalLanguage"

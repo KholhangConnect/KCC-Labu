@@ -9,11 +9,11 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.CIS">
+        android:theme="@style/Theme.MTL">
         <activity
-            android:name="com.tinashe.hymnal.ui.MainActivity"
+            android:name="com.kholhang.kcclabu.ui.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.CIS.Main"
+            android:theme="@style/Theme.MTL.Main"
             android:windowSoftInputMode="adjustNothing"
             android:exported="true">
             <intent-filter>
@@ -26,16 +26,17 @@
         <activity
             android:name=".ui.hymns.sing.SingHymnsActivity"
             android:label="@string/blank"
-            android:theme="@style/Theme.CIS.Sing" />
+            android:theme="@style/Theme.MTL.Sing" />
 
         <activity
             android:name=".ui.hymns.sing.edit.EditHymnActivity"
             android:label="@string/title_edit_hymn"
-            android:theme="@style/Theme.CIS.Sing" />
+            android:theme="@style/Theme.MTL.Sing" />
 
         <activity
             android:name=".ui.hymns.sing.present.PresentHymnActivity"
             android:label="@string/blank"
+            android:theme="@style/Theme.MTL.Sing"
             android:screenOrientation="userLandscape" />
 
         <!-- Initializers -->
@@ -46,7 +47,7 @@
             tools:node="merge">
 
             <meta-data
-                android:name="com.tinashe.hymnal.initializer.TimberInitializer"
+                android:name="com.kholhang.kcclabu.initializer.TimberInitializer"
                 android:value="androidx.startup" />
 
         </provider>
