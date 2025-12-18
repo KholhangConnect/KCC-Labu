@@ -73,6 +73,17 @@ jobs:
         id: tag
         run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
+      - name: Determine if draft release
+        id: is_draft
+        run: |
+          if [[ "${{ github.ref_name }}" == *"-draft"* ]] || [[ "${{ github.ref_name }}" == *"-pre"* ]]; then
+            echo "is_draft=true" >> $GITHUB_OUTPUT
+            echo "is_prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_draft=false" >> $GITHUB_OUTPUT
+            echo "is_prerelease=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Create Release
         if: startsWith(github.ref, 'refs/tags/')
         uses: softprops/action-gh-release@v1
@@ -82,8 +93,8 @@ jobs:
           files: |
             app/build/outputs/apk/debug/app-debug.apk
             app/build/outputs/apk/release/app-release.apk
-          draft: false
-          prerelease: false
+          draft: ${{ steps.is_draft.outputs.is_draft }}
+          prerelease: ${{ steps.is_draft.outputs.is_prerelease }}
           generate_release_notes: true
           fail_on_unmatched_files: false
         env:
