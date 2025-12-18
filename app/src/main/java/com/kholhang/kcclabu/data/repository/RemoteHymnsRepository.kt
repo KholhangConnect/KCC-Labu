@@ -151,6 +151,7 @@ class RemoteHymnsRepository(
                         override fun onDataChange(snapshot: DataSnapshot) {
                             val hymnals = snapshot.children.mapNotNull { child ->
                                 child.key?.let { code ->
+                                    // Using KTX extension which is the recommended modern API
                                     child.getValue<TitleLanguage>()?.let {
                                         RemoteHymnal(code, it.title, it.language)
                                     }

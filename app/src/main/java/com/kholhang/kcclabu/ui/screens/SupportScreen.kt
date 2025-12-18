@@ -14,7 +14,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.android.billingclient.api.SkuDetails
+import com.android.billingclient.api.ProductDetails
 import com.kholhang.kcclabu.R
 import com.kholhang.kcclabu.data.model.constants.Status
 import com.kholhang.kcclabu.ui.support.SupportViewModel
@@ -116,6 +116,7 @@ fun SupportScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         inAppProducts.forEach { product ->
+                            val price = product.oneTimePurchaseOfferDetails?.formattedPrice ?: ""
                             FilterChip(
                                 selected = false,
                                 onClick = {
@@ -123,7 +124,7 @@ fun SupportScreen(
                                         viewModel.initiatePurchase(product, context)
                                     }
                                 },
-                                label = { Text(product.price) }
+                                label = { Text(price) }
                             )
                         }
                     }
@@ -142,6 +143,9 @@ fun SupportScreen(
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         subscriptions.forEach { product ->
+                            // Get price from subscription offer details (usually the first/base plan)
+                            val offerDetails = product.subscriptionOfferDetails?.firstOrNull()
+                            val price = offerDetails?.pricingPhases?.pricingPhaseList?.firstOrNull()?.formattedPrice ?: ""
                             FilterChip(
                                 selected = false,
                                 onClick = {
@@ -153,7 +157,7 @@ fun SupportScreen(
                                     Text(
                                         stringResource(
                                             R.string.subscription_period,
-                                            product.price
+                                            price
                                         )
                                     )
                                 }

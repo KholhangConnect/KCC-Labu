@@ -36,7 +36,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         
         // Check if we need to navigate to a specific screen
-        val navigateTo = intent.getStringExtra("navigate_to")
         try {
             val navigateTo = intent.getStringExtra("navigate_to")
             val initialRoute = when (navigateTo) {

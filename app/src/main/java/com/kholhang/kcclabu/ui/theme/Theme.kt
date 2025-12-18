@@ -90,10 +90,18 @@ fun MTLTheme(
             val context = view.context
             if (context is Activity) {
                 val window = context.window
-                window.statusBarColor = colorScheme.background.toArgb()
-                window.navigationBarColor = colorScheme.background.toArgb()
-                WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
-                WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !darkTheme
+                val insetsController = WindowCompat.getInsetsController(window, view)
+                insetsController.isAppearanceLightStatusBars = !darkTheme
+                insetsController.isAppearanceLightNavigationBars = !darkTheme
+                // API 26+ baseline: Use transparent system bars on API 30+, solid colors on API 26-29
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    window.statusBarColor = android.graphics.Color.TRANSPARENT
+                    window.navigationBarColor = android.graphics.Color.TRANSPARENT
+                } else {
+                    // API 26-29: Use solid colors (not deprecated on these versions)
+                    window.statusBarColor = colorScheme.background.toArgb()
+                    window.navigationBarColor = colorScheme.background.toArgb()
+                }
             }
         }
     }

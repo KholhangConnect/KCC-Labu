@@ -7,6 +7,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -50,37 +52,16 @@ class SingHymnsActivity : AppCompatActivity(), TextStyleChanges {
 
     private var currentPosition: Int? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        applyMaterialTransform(getString(R.string.transition_shared_element))
-        super.onCreate(savedInstanceState)
-        binding = ActivitySingBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        initUi()
-
-        val number = intent.getIntExtra(ARG_SELECTED, 1)
-
-        viewModel.statusLiveData.observeNonNull(this) {
-        }
-        viewModel.hymnalTitleLiveData.observeNonNull(this) {
-            title = it
-        }
-        viewModel.hymnListLiveData.observeNonNull(this) {
-            pagerAdapter = SingFragmentsAdapter(this, it)
-            binding.viewPager.apply {
-                adapter = pagerAdapter
-                val position = currentPosition ?: number.minus(1)
-                setCurrentItem(position, false)
-                currentPosition = null
-            }
-        }
-        tunePlayer.playbackLiveData.observeNonNull(this) {
-            invalidateOptionsMenu()
-        }
-
+    private val editHymnLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            currentPosition = binding.viewPager.currentItem
         val collectionId = intent.getIntExtra(ARG_COLLECTION_ID, -1)
         viewModel.loadData(collectionId)
     }
+    }
+
 
     @SuppressLint("ClickableViewAccessibility")
     private fun initUi() {
@@ -173,12 +154,48 @@ class SingHymnsActivity : AppCompatActivity(), TextStyleChanges {
         }
     }
 
-    override fun onBackPressed() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        applyMaterialTransform(getString(R.string.transition_shared_element))
+        super.onCreate(savedInstanceState)
+        binding = ActivitySingBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Handle back button press
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
         if (binding.fabNumber.isExpanded) {
             hideNumPad()
-            return
+                } else {
+                    isEnabled = false
+                    onBackPressedDispatcher.onBackPressed()
+                }
+            }
+        })
+
+        initUi()
+
+        val number = intent.getIntExtra(ARG_SELECTED, 1)
+
+        viewModel.statusLiveData.observeNonNull(this) {
         }
-        super.onBackPressed()
+        viewModel.hymnalTitleLiveData.observeNonNull(this) {
+            title = it
+        }
+        viewModel.hymnListLiveData.observeNonNull(this) {
+            pagerAdapter = SingFragmentsAdapter(this, it)
+            binding.viewPager.apply {
+                adapter = pagerAdapter
+                val position = currentPosition ?: number.minus(1)
+                setCurrentItem(position, false)
+                currentPosition = null
+            }
+        }
+        tunePlayer.playbackLiveData.observeNonNull(this) {
+            invalidateOptionsMenu()
+        }
+
+        val collectionId = intent.getIntExtra(ARG_COLLECTION_ID, -1)
+        viewModel.loadData(collectionId)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -207,7 +224,7 @@ class SingHymnsActivity : AppCompatActivity(), TextStyleChanges {
                         ?: return false
 
                     val intent = EditHymnActivity.editIntent(this, hymn)
-                    startActivityForResult(intent, RC_EDIT_HYMN)
+                    editHymnLauncher.launch(intent)
                 }
                 true
             }
@@ -287,20 +304,9 @@ class SingHymnsActivity : AppCompatActivity(), TextStyleChanges {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_EDIT_HYMN && resultCode == Activity.RESULT_OK) {
-            currentPosition = binding.viewPager.currentItem
-
-            val collectionId = intent.getIntExtra(ARG_COLLECTION_ID, -1)
-            viewModel.loadData(collectionId)
-        }
-    }
-
     companion object {
         private const val ARG_SELECTED = "arg:selected_number"
         private const val ARG_COLLECTION_ID = "arg:collection_id"
-        private const val RC_EDIT_HYMN = 23
 
         fun singIntent(context: Context, number: Int): Intent =
             Intent(context, SingHymnsActivity::class.java).apply {

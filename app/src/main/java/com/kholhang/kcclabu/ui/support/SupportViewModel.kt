@@ -13,14 +13,14 @@ import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.BillingClientStateListener
 import com.android.billingclient.api.BillingFlowParams
 import com.android.billingclient.api.BillingResult
+import com.android.billingclient.api.ProductDetails
 import com.android.billingclient.api.Purchase
-import com.android.billingclient.api.PurchaseHistoryRecord
-import com.android.billingclient.api.PurchaseHistoryResponseListener
 import com.android.billingclient.api.PurchasesUpdatedListener
-import com.android.billingclient.api.SkuDetails
-import com.android.billingclient.api.SkuDetailsParams
+import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.acknowledgePurchase
-import com.android.billingclient.api.querySkuDetails
+import com.android.billingclient.api.queryProductDetails
+import com.android.billingclient.api.QueryPurchasesParams
+import com.android.billingclient.api.PurchasesResponseListener
 import com.kholhang.kcclabu.BuildConfig
 import com.kholhang.kcclabu.R
 import com.kholhang.kcclabu.data.model.constants.Status
@@ -36,40 +36,8 @@ class SupportViewModel @Inject constructor() :
     PurchasesUpdatedListener,
     BillingClientStateListener {
     
-    // Helper function to get SKU from SkuDetails
-    private fun SkuDetails.getSkuValue(): String {
-        return try {
-            // Try getSku() method first
-            javaClass.getMethod("getSku").invoke(this) as? String ?: ""
-        } catch (e: Exception) {
-            try {
-                // Try sku field
-                javaClass.getField("sku").get(this) as? String ?: ""
-            } catch (e2: Exception) {
-                // Fallback: try productId
-                try {
-                    javaClass.getMethod("getProductId").invoke(this) as? String ?: ""
-                } catch (e3: Exception) {
-                    ""
-                }
-            }
-        }
-    }
-    
-    // Helper function to get SKU from PurchaseHistoryRecord
-    private fun PurchaseHistoryRecord.getSkuValue(): String {
-        return try {
-            // Try getSku() method first
-            javaClass.getMethod("getSku").invoke(this) as? String ?: ""
-        } catch (e: Exception) {
-            try {
-                // Try sku field
-                javaClass.getField("sku").get(this) as? String ?: ""
-            } catch (e2: Exception) {
-                ""
-            }
-        }
-    }
+    // Helper function to get product ID from ProductDetails
+    private fun ProductDetails.getProductId(): String = productId
 
     private val mutablePurchaseResult = SingleLiveEvent<Pair<Status, @StringRes Int?>>()
     val purchaseResultLiveData: LiveData<Pair<Status, Int?>> = mutablePurchaseResult.asLiveData()
@@ -77,14 +45,14 @@ class SupportViewModel @Inject constructor() :
     private val mutableDeepLinkUrl = SingleLiveEvent<String>()
     val deepLinkLiveData: LiveData<String> = mutableDeepLinkUrl.asLiveData()
 
-    private val mutableInAppProducts = MutableLiveData<List<SkuDetails>>()
-    val inAppProductsLiveData: LiveData<List<SkuDetails>> = mutableInAppProducts.asLiveData()
+    private val mutableInAppProducts = MutableLiveData<List<ProductDetails>>()
+    val inAppProductsLiveData: LiveData<List<ProductDetails>> = mutableInAppProducts.asLiveData()
 
-    private val mutableSubscriptions = MutableLiveData<List<SkuDetails>>()
-    val subscriptionsLiveData: LiveData<List<SkuDetails>> = mutableSubscriptions.asLiveData()
+    private val mutableSubscriptions = MutableLiveData<List<ProductDetails>>()
+    val subscriptionsLiveData: LiveData<List<ProductDetails>> = mutableSubscriptions.asLiveData()
 
     private var billingClient: BillingClient? = null
-    private var purchaseHistory = emptyList<PurchaseHistoryRecord>()
+    private var purchaseHistory = emptyList<Purchase>()
 
     fun loadData(activity: Activity) {
         if (billingClient?.isReady == true) {
@@ -93,7 +61,6 @@ class SupportViewModel @Inject constructor() :
 
         billingClient = BillingClient.newBuilder(activity)
             .setListener(this)
-            .enablePendingPurchases()
             .build()
 
         billingClient?.startConnection(this)
@@ -147,63 +114,165 @@ class SupportViewModel @Inject constructor() :
     }
 
     private fun queryOneTimeDonations() {
-        val params = SkuDetailsParams.newBuilder()
-            .setSkusList(inAppDonations)
-            .setType(BillingClient.SkuType.INAPP)
+        val productList = inAppDonations.map { productId ->
+            QueryProductDetailsParams.Product.newBuilder()
+                .setProductId(productId)
+                .setProductType(BillingClient.ProductType.INAPP)
+                .build()
+        }
+
+        val params = QueryProductDetailsParams.newBuilder()
+            .setProductList(productList)
             .build()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val result = billingClient?.querySkuDetails(params)
-            val products = if (result?.billingResult?.responseCode == BillingClient.BillingResponseCode.OK) {
-                result.skuDetailsList?.sortedBy { it.priceAmountMicros }
+            billingClient?.queryProductDetails(params)?.let { result ->
+                val products = if (result.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    (result.productDetailsList ?: emptyList()).sortedBy { product ->
+                        // Get price from one-time purchase offer details
+                        product.oneTimePurchaseOfferDetails?.priceAmountMicros ?: 0L
+                    }
             } else {
-                Timber.e(result?.billingResult?.debugMessage)
+                    Timber.e(result.billingResult.debugMessage)
                 emptyList()
             }
             mutableInAppProducts.postValue(products)
+            }
         }
     }
 
     private fun queryRecurringDonations() {
-        val params = SkuDetailsParams.newBuilder()
-            .setSkusList(subscriptions)
-            .setType(BillingClient.SkuType.SUBS)
+        val productList = subscriptions.map { productId ->
+            QueryProductDetailsParams.Product.newBuilder()
+                .setProductId(productId)
+                .setProductType(BillingClient.ProductType.SUBS)
+                .build()
+        }
+
+        val params = QueryProductDetailsParams.newBuilder()
+            .setProductList(productList)
             .build()
 
         viewModelScope.launch(Dispatchers.IO) {
-            val result = billingClient?.querySkuDetails(params)
-            val subs = if (result?.billingResult?.responseCode == BillingClient.BillingResponseCode.OK) {
-                result.skuDetailsList
+            billingClient?.queryProductDetails(params)?.let { result ->
+                val subs = if (result.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+                    result.productDetailsList ?: emptyList()
             } else {
-                Timber.e(result?.billingResult?.debugMessage)
+                    Timber.e(result.billingResult.debugMessage)
                 emptyList()
             }
             mutableSubscriptions.postValue(subs)
+            }
         }
     }
 
     private fun queryPurchases() {
-        val listener = PurchaseHistoryResponseListener { _, purchases ->
-            Timber.i("Purchases: $purchases")
-            purchaseHistory = purchases ?: emptyList()
+        viewModelScope.launch(Dispatchers.IO) {
+            val allPurchases = mutableListOf<Purchase>()
+            
+            val listener = PurchasesResponseListener { result, purchases ->
+                if (result.responseCode == BillingClient.BillingResponseCode.OK) {
+                    // Get purchases list - property name may vary by version
+                    val purchaseList = try {
+                        purchases.javaClass.getMethod("getPurchasesList").invoke(purchases) as? List<Purchase>
+                            ?: purchases.javaClass.getField("purchasesList").get(purchases) as? List<Purchase>
+                            ?: emptyList()
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error getting purchases list")
+                        emptyList<Purchase>()
+                    }
+                    Timber.i("Purchases: $purchaseList")
+                    allPurchases.addAll(purchaseList)
+                    purchaseHistory = allPurchases
+                }
+            }
+            
+            // Query in-app purchases
+            val inAppParams = QueryPurchasesParams.newBuilder()
+                .setProductType(BillingClient.ProductType.INAPP)
+                .build()
+            billingClient?.queryPurchasesAsync(inAppParams, listener)
+
+            // Query subscriptions
+            val subsParams = QueryPurchasesParams.newBuilder()
+                .setProductType(BillingClient.ProductType.SUBS)
+                .build()
+            billingClient?.queryPurchasesAsync(subsParams, listener)
         }
-        billingClient?.queryPurchaseHistoryAsync(BillingClient.SkuType.INAPP, listener)
-        billingClient?.queryPurchaseHistoryAsync(BillingClient.SkuType.SUBS, listener)
     }
 
-    fun initiatePurchase(product: SkuDetails, activity: Activity) {
-        val productSku = product.getSkuValue()
-        if (purchaseHistory.find { it.getSkuValue() == productSku } != null) {
-            if (product.type == BillingClient.SkuType.SUBS) {
-                val url = "$SUBS_BASE_URL?$productSku&package=${BuildConfig.APPLICATION_ID}"
+    fun initiatePurchase(product: ProductDetails, activity: Activity) {
+        val productId = product.getProductId()
+        if (purchaseHistory.find { it.products.contains(productId) } != null) {
+            // Check if it's a subscription
+            if (product.productType == BillingClient.ProductType.SUBS) {
+                val url = "$SUBS_BASE_URL?$productId&package=${BuildConfig.APPLICATION_ID}"
                 mutableDeepLinkUrl.postValue(url)
             } else {
                 mutablePurchaseResult.postValue(Status.ERROR to R.string.error_item_already_owned)
             }
             return
         }
+        
+        // Build billing flow params based on product type
+        val productDetailsParamsList = when (product.productType) {
+            BillingClient.ProductType.INAPP -> {
+                // For one-time purchases, use oneTimePurchaseOfferDetails
+                product.oneTimePurchaseOfferDetails?.let { offerDetails ->
+                    // Get offer token - it's a property in the API
+                    val offerToken = try {
+                        offerDetails.javaClass.getMethod("getOfferToken").invoke(offerDetails) as? String
+                            ?: offerDetails.javaClass.getField("offerToken").get(offerDetails) as? String
+                            ?: ""
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error getting offer token")
+                        ""
+                    }
+                    if (offerToken.isNotEmpty()) {
+                        listOf(
+                            BillingFlowParams.ProductDetailsParams.newBuilder()
+                                .setProductDetails(product)
+                                .setOfferToken(offerToken)
+                                .build()
+                        )
+                    } else {
+                        emptyList()
+                    }
+                } ?: emptyList()
+            }
+            BillingClient.ProductType.SUBS -> {
+                // For subscriptions, use subscriptionOfferDetails
+                product.subscriptionOfferDetails?.mapNotNull { offerDetails ->
+                    // Get offer token - it's a property in the API
+                    val offerToken = try {
+                        offerDetails.javaClass.getMethod("getOfferToken").invoke(offerDetails) as? String
+                            ?: offerDetails.javaClass.getField("offerToken").get(offerDetails) as? String
+                            ?: ""
+                    } catch (e: Exception) {
+                        Timber.e(e, "Error getting offer token")
+                        ""
+                    }
+                    if (offerToken.isNotEmpty()) {
+                        BillingFlowParams.ProductDetailsParams.newBuilder()
+                            .setProductDetails(product)
+                            .setOfferToken(offerToken)
+                            .build()
+                    } else {
+                        null
+                    }
+                } ?: emptyList()
+            }
+            else -> emptyList()
+        }
+        
+        if (productDetailsParamsList.isEmpty()) {
+            Timber.e("No offer details available for product: $productId")
+            mutablePurchaseResult.postValue(Status.ERROR to null)
+            return
+        }
+        
         val flowParams = BillingFlowParams.newBuilder()
-            .setSkuDetails(product)
+            .setProductDetailsParamsList(productDetailsParamsList)
             .build()
         val result = billingClient?.launchBillingFlow(activity, flowParams)
 

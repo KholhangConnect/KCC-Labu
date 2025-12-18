@@ -27,69 +27,85 @@ class TextStyleFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val model = arguments?.get(ARG_MODEL) as? TextStyleModel
-            ?: return
+        // API 26+ baseline: Use modern typed Parcelable API on API 33+, fallback for API 26-32
+        val model = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(ARG_MODEL, TextStyleModel::class.java)
+        } else {
+            arguments?.getParcelable<TextStyleModel>(ARG_MODEL)
+        } ?: return
 
         binding?.apply {
-            chipGroupTheme.apply {
-                check(
-                    when (model.pref) {
-                        UiPref.DAY -> R.id.chipThemeLight
-                        UiPref.NIGHT -> R.id.chipThemeDark
-                        else -> R.id.chipThemeSystem
-                    }
-                )
-                setOnCheckedChangeListener { _, checkedId ->
-                    val pref = when (checkedId) {
-                        R.id.chipThemeLight -> UiPref.DAY
-                        R.id.chipThemeDark -> UiPref.NIGHT
-                        R.id.chipThemeSystem -> UiPref.FOLLOW_SYSTEM
-                        else -> return@setOnCheckedChangeListener
-                    }
-                    styleChanges?.updateTheme(pref)
-                    dismiss()
-                }
+            // Use individual chip listeners instead of deprecated ChipGroup listener
+            // Get chips from ChipGroup using findViewById
+            chipGroupTheme.findViewById<com.google.android.material.chip.Chip>(R.id.chipThemeSystem)?.setOnClickListener {
+                chipGroupTheme.check(R.id.chipThemeSystem)
+                styleChanges?.updateTheme(UiPref.FOLLOW_SYSTEM)
+                dismiss()
             }
-
-            chipGroupTypeface.apply {
-                check(
-                    when (model.fontRes) {
-                        R.font.lato -> R.id.chipTypefaceLato
-                        R.font.andada -> R.id.chipTypefaceAndada
-                        R.font.roboto -> R.id.chipTypefaceRoboto
-                        R.font.gentium_basic -> R.id.chipTypefaceGentium
-                        else -> R.id.chipTypefaceProxima
-                    }
-                )
-
-                setOnCheckedChangeListener { _, checkedId ->
-                    val typeface = when (checkedId) {
-                        R.id.chipTypefaceLato -> R.font.lato
-                        R.id.chipTypefaceAndada -> R.font.andada
-                        R.id.chipTypefaceRoboto -> R.font.roboto
-                        R.id.chipTypefaceGentium -> R.font.gentium_basic
-                        R.id.chipTypefaceProxima -> R.font.proxima_nova_soft_regular
-                        else -> return@setOnCheckedChangeListener
-                    }
-                    styleChanges?.updateTypeFace(typeface)
+            chipGroupTheme.findViewById<com.google.android.material.chip.Chip>(R.id.chipThemeLight)?.setOnClickListener {
+                chipGroupTheme.check(R.id.chipThemeLight)
+                styleChanges?.updateTheme(UiPref.DAY)
+                dismiss()
+            }
+            chipGroupTheme.findViewById<com.google.android.material.chip.Chip>(R.id.chipThemeDark)?.setOnClickListener {
+                chipGroupTheme.check(R.id.chipThemeDark)
+                styleChanges?.updateTheme(UiPref.NIGHT)
+                dismiss()
+            }
+            chipGroupTheme.check(
+                when (model.pref) {
+                    UiPref.DAY -> R.id.chipThemeLight
+                    UiPref.NIGHT -> R.id.chipThemeDark
+                    else -> R.id.chipThemeSystem
                 }
+            )
 
-                sizeSlider.apply {
-                    value = model.textSize
-                    addOnChangeListener { _, value, fromUser ->
-                        if (fromUser) {
-                            styleChanges?.updateTextSize(value)
-                        }
+            // Use individual chip listeners instead of deprecated ChipGroup listener
+            chipGroupTypeface.findViewById<com.google.android.material.chip.Chip>(R.id.chipTypefaceProxima)?.setOnClickListener {
+                chipGroupTypeface.check(R.id.chipTypefaceProxima)
+                styleChanges?.updateTypeFace(R.font.proxima_nova_soft_regular)
+            }
+            chipGroupTypeface.findViewById<com.google.android.material.chip.Chip>(R.id.chipTypefaceLato)?.setOnClickListener {
+                chipGroupTypeface.check(R.id.chipTypefaceLato)
+                styleChanges?.updateTypeFace(R.font.lato)
+            }
+            chipGroupTypeface.findViewById<com.google.android.material.chip.Chip>(R.id.chipTypefaceAndada)?.setOnClickListener {
+                chipGroupTypeface.check(R.id.chipTypefaceAndada)
+                styleChanges?.updateTypeFace(R.font.andada)
+            }
+            chipGroupTypeface.findViewById<com.google.android.material.chip.Chip>(R.id.chipTypefaceRoboto)?.setOnClickListener {
+                chipGroupTypeface.check(R.id.chipTypefaceRoboto)
+                styleChanges?.updateTypeFace(R.font.roboto)
+            }
+            chipGroupTypeface.findViewById<com.google.android.material.chip.Chip>(R.id.chipTypefaceGentium)?.setOnClickListener {
+                chipGroupTypeface.check(R.id.chipTypefaceGentium)
+                styleChanges?.updateTypeFace(R.font.gentium_basic)
+            }
+            chipGroupTypeface.check(
+                when (model.fontRes) {
+                    R.font.lato -> R.id.chipTypefaceLato
+                    R.font.andada -> R.id.chipTypefaceAndada
+                    R.font.roboto -> R.id.chipTypefaceRoboto
+                    R.font.gentium_basic -> R.id.chipTypefaceGentium
+                    else -> R.id.chipTypefaceProxima
+                }
+            )
+
+            sizeSlider.apply {
+                value = model.textSize
+                addOnChangeListener { _, value, fromUser ->
+                    if (fromUser) {
+                        styleChanges?.updateTextSize(value)
                     }
-                    setLabelFormatter {
-                        when (it) {
-                            14f -> "xSmall"
-                            18f -> "Small"
-                            22f -> "Medium"
-                            26f -> "Large"
-                            30f -> "xLarge"
-                            else -> ""
-                        }
+                }
+                setLabelFormatter {
+                    when (it) {
+                        14f -> "xSmall"
+                        18f -> "Small"
+                        22f -> "Medium"
+                        26f -> "Large"
+                        30f -> "xLarge"
+                        else -> ""
                     }
                 }
             }

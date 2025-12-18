@@ -266,7 +266,6 @@ private fun launchWebUrl(context: android.content.Context, url: String) {
     try {
         val builder = CustomTabsIntent.Builder()
             .setShowTitle(true)
-            .enableUrlBarHiding()
         val intent = builder.build()
         intent.launchUrl(context, Uri.parse(url))
     } catch (ex: Exception) {

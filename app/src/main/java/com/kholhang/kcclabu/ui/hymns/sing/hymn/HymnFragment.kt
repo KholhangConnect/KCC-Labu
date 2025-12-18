@@ -78,11 +78,9 @@ class HymnFragment : Fragment() {
                 hymnText.isClickable = true
                 hymnText.isLongClickable = true
                 
-                // Better text rendering for improved readability
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-                    hymnText.setBreakStrategy(android.text.Layout.BREAK_STRATEGY_BALANCED)
-                    hymnText.hyphenationFrequency = android.text.Layout.HYPHENATION_FREQUENCY_NORMAL
-                }
+                // Better text rendering for improved readability (API 26+ supports this)
+                hymnText.setBreakStrategy(android.text.Layout.BREAK_STRATEGY_BALANCED)
+                hymnText.hyphenationFrequency = android.text.Layout.HYPHENATION_FREQUENCY_NORMAL
                 
                 // Improve text selection and interaction
                 hymnText.setMovementMethod(android.text.method.ArrowKeyMovementMethod.getInstance())
@@ -92,7 +90,12 @@ class HymnFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val hymn: Hymn = arguments?.get(ARG_HYMN) as? Hymn ?: return
+        // API 26+ baseline: Use modern typed Parcelable API on API 33+, fallback for API 26-32
+        val hymn: Hymn = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            arguments?.getParcelable(ARG_HYMN, Hymn::class.java)
+        } else {
+            arguments?.getParcelable<Hymn>(ARG_HYMN)
+        } ?: return
         loadHymnContent(hymn)
     }
     
@@ -121,9 +124,13 @@ class HymnFragment : Fragment() {
             }
             
             // Reapply chorus color
-            (arguments?.get(ARG_HYMN) as? Hymn)?.let { hymn ->
-                loadHymnContent(hymn)
+            val hymn = if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+                arguments?.getParcelable(ARG_HYMN, Hymn::class.java)
+            } else {
+                @Suppress("DEPRECATION")
+                arguments?.getParcelable<Hymn>(ARG_HYMN)
             }
+            hymn?.let { loadHymnContent(it) }
         }
     }
     

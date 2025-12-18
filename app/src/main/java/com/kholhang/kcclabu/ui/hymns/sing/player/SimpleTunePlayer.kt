@@ -3,10 +3,9 @@ package com.kholhang.kcclabu.ui.hymns.sing.player
 import android.content.Context
 import android.media.MediaPlayer
 import androidx.annotation.VisibleForTesting
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.OnLifecycleEvent
 import com.kholhang.kcclabu.extensions.arch.SingleLiveEvent
 import com.kholhang.kcclabu.extensions.arch.asLiveData
 import com.kholhang.kcclabu.extensions.prefs.HymnalPrefs
@@ -17,7 +16,7 @@ import javax.inject.Inject
 class SimpleTunePlayer @Inject constructor(
     private val context: Context,
     private val prefs: HymnalPrefs
-) : LifecycleObserver {
+) : DefaultLifecycleObserver {
 
     private val mutablePlaybackState = SingleLiveEvent<PlaybackState>()
     val playbackLiveData: LiveData<PlaybackState> = mutablePlaybackState.asLiveData()
@@ -75,8 +74,8 @@ class SimpleTunePlayer @Inject constructor(
         mutablePlaybackState.postValue(PlaybackState.ON_STOP)
     }
 
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    fun onPause() {
+    override fun onPause(owner: LifecycleOwner) {
+        super.onPause(owner)
         stopMedia()
     }
 

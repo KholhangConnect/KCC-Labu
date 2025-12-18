@@ -1,25 +1,26 @@
 ext.versions = [
-        'minSdk'            : 23,
+        'minSdk'            : 26,  // Android 8.0 Oreo - Modern architecture baseline
         'targetSdk'         : 36,
         'kotlin'            : '1.9.25',
+        'ksp'               : '1.9.25-1.0.20',
         'compose_bom'       : '2024.12.01',
         'compose_compiler'  : '1.5.15',
-        'material'          : '1.12.0',
-        'ktx'               : '1.13.1',
+        'material'          : '1.13.0',  // Latest Material Components
+        'ktx'               : '1.15.0',  // Latest Core KTX
         'appcompat'         : '1.7.0',
-        'lifecycle'         : '2.8.6',
-        'const_layout'      : '2.1.0',
+        'lifecycle'         : '2.8.7',  // Latest Lifecycle
+        'const_layout'      : '2.2.0',  // Latest ConstraintLayout
         'navigation'        : '2.8.2',
         'arch_comp'         : '2.2.0',
         'startup'           : '1.2.0',
         'recyclerview'      : '1.3.2',
         'preference'        : '1.2.1',
-        'browser'           : '1.8.0',
+        'browser'           : '1.9.0',  // Latest Browser
         'coroutines'        : '1.9.0',
         'timber'            : '5.0.1',
         'room'              : '2.6.1',
-        'hilt'              : '2.51.1',
-        'hilt_androidx'     : '1.1.0',
+        'hilt'              : '2.51.1',  // Stable Hilt
+        'hilt_androidx'     : '1.1.0',  // Stable Hilt AndroidX
         'moshi'             : '1.15.1',
         'fb_storage'        : '21.0.0',
         'fb_database'       : '21.0.0',
@@ -27,7 +28,7 @@ ext.versions = [
         'fb_analytics'      : '22.0.0',
         'fb_crashytics'     : '19.0.0',
         'ktlint'            : '0.50.0',
-        'billing'           : '7.1.1',
+        'billing'           : '7.1.1',  // Stable Billing Library
 
         // testing
         'junit'             : '4.13.2',
